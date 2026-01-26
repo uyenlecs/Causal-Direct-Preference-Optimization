@@ -199,7 +199,6 @@ class BasicTrainer(object):
             rank0_print(
                 f"Trainer using tokenizer with vocab {len(self.tokenizer)}, "
                 f"adj tokens {self.tokenizer.convert_ids_to_tokens(flat_ids)}, "
-                f"mode {getattr(self.tokenizer, 'adj_mode', 'N/A')}"
             )
 
         else:
@@ -289,7 +288,6 @@ class BasicTrainer(object):
         metrics = {}
         train_test = 'train' if train else 'eval'
         print(f"[DEBUG] get_batch_metrics: loss={loss_config.name}, backdoor.enabled={getattr(self.config.backdoor, 'enabled', None)}")
-        print(f"[DEBUG] adj_token_ids={getattr(self.tokenizer, 'adj_token_ids', None)} adj_mode={getattr(self.tokenizer, 'adj_mode', None)}")
 
         if loss_config.name in {'dpo', 'ipo'}:
             # ---------------- DPO / IPO ----------------
@@ -467,7 +465,7 @@ class BasicTrainer(object):
         logps_chosen_all, logps_rejected_all = [], []
 
         # ---- LOOP OVER ADJ TOKENS ----
-        for i, adj_ids in enumerate(sampled_adj_ids):
+        for adj_ids in sampled_adj_ids:
             adj_batch = {
                 k: (v.clone() if isinstance(v, torch.Tensor) else v)
                 for k, v in batch.items()
@@ -493,26 +491,6 @@ class BasicTrainer(object):
                 adj_ids,
             )
 
-            # ---- DEBUG (only once) ----
-            if i == 0:
-                print("\n=== AFTER INSERT ===")
-                print("adj_ids:", adj_ids)
-                try:
-                    print("adj_tokens:", self.tokenizer.convert_ids_to_tokens(adj_ids))
-                except Exception:
-                    pass
-
-                print("\n[CHOSEN]")
-                print(self.tokenizer.decode(
-                    adj_batch["chosen_input_ids"][0],
-                    skip_special_tokens=False
-                ))
-
-                print("\n[REJECTED]")
-                print(self.tokenizer.decode(
-                    adj_batch["rejected_input_ids"][0],
-                    skip_special_tokens=False
-                ))
 
             # ---- FORWARD ----
             chosen_logps, rejected_logps = self.concatenated_forward(model, adj_batch)
@@ -606,22 +584,13 @@ class BasicTrainer(object):
             return new_seq, new_mask, new_labels
 
         # ---- LOOP OVER ADJ TOKENS ----
-        for idx, adj_ids in enumerate(sampled_adj_ids):
+        for adj_ids in sampled_adj_ids:
             adj_batch = {
                 k: (v.clone() if isinstance(v, torch.Tensor) else v)
                 for k, v in batch.items()
             }
 
-            # ---- DEBUG BEFORE INSERT (once) ----
-            if idx == 0:
-                print("\n=== SFT DEBUG: BEFORE INSERT ===")
-                print("[CHOSEN]")
-                print(
-                    self.tokenizer.decode(
-                        batch["chosen_input_ids"][0],
-                        skip_special_tokens=False,
-                    )
-                )
+       
 
             # ---- INSERT (chosen only) ----
             adj_batch["chosen_input_ids"], \
@@ -632,23 +601,6 @@ class BasicTrainer(object):
                 adj_batch["chosen_labels"],
                 adj_ids,
             )
-
-            # ---- DEBUG AFTER INSERT (once) ----
-            if idx == 0:
-                print("\n=== SFT DEBUG: AFTER INSERT ===")
-                print("adj_ids:", adj_ids)
-                try:
-                    print("adj_tokens:", self.tokenizer.convert_ids_to_tokens(adj_ids))
-                except Exception:
-                    pass
-
-                print("[CHOSEN]")
-                print(
-                    self.tokenizer.decode(
-                        adj_batch["chosen_input_ids"][0],
-                        skip_special_tokens=False,
-                    )
-                )
 
             # ---- FORWARD ----
             logits = model(

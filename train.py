@@ -125,12 +125,10 @@ def main(config: DictConfig):
             adj_token_ids.append(ids)
 
         tokenizer.adj_token_ids = adj_token_ids  # list of lists, e.g. [[50260], [32001,32002]]
-        tokenizer.adj_mode = str(config.backdoor.mode)
         policy.resize_token_embeddings(len(tokenizer))
         print(f"Loaded {len(tokens)} tokens for dataset {dataset_name}: {tokens}")
         print("Tokenizer special tokens:", tokenizer.additional_special_tokens)
         print("adj_token_ids (list of lists):", getattr(tokenizer, "adj_token_ids", None))
-        print("adj_mode:", getattr(tokenizer, "adj_mode", None))
         # --- end patch ---
 
 

@@ -104,5 +104,4 @@ backdoor:
     tokens: ["<askacademia>", "<askanthropology>", "<askbaking>", "<askcarguys>", "<askculinary>", "<askdocs>", "<askengineers>", "<askhistorians>", "<askhr>", "<askphilosophy>", "<askphysics>", "<askscience>", "<asksciencefiction>", "<asksocialscience>", "<askvet>", "<changemyview>", "<explainlikeimfive>", "<legaladvice>"]
 
 
-  mode: pre_human          # Prepend or append confounder tokens to the prompt
   n_mc_samples: 1   # Number of Monte Carlo samples
