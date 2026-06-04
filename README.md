@@ -84,3 +84,18 @@ For further experimental details, please refer to our paper.
 ## Acknowledgements
 
 We thank the authors and contributors of the [Direct Preference Optimization (DPO)](https://github.com/eric-mitchell/direct-preference-optimization) repository for their valuable contributions to the RLHF community. This work builds upon and extends their open-source implementation.
+
+
+## Citation
+
+If you find this work useful in your research, please cite:
+
+```bibtex
+@inproceedings{Le_etal_26Causal,
+  title={Causal Direct Preference Optimization for Language Model Alignment},
+  author={Le, Uyen and Nguyen, Thin and Nguyen, Toan and Doan, Toan and Le, Trung and Le, Bac},
+  booktitle={Findings of the Association for Computational Linguistics: EACL 2026},
+  pages={1098--1113},
+  year={2026}
+}
+```
