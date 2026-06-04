@@ -1,7 +1,9 @@
 # 🧠 CDPO: Causal Direct Preference Optimization with Backdoor Adjustment
 
-This repository contains the official implementation of Causal Direct Preference Optimization (CDPO), proposed in the paper: 
-> **[Causal Direct Preference Optimization for Language Model Alignment](https://aclanthology.org/2026.findings-eacl.58/)**  
+
+This is the official implementation of **"[Causal Direct Preference Optimization for Language Model Alignment](https://aclanthology.org/2026.findings-eacl.58/)"** (Findings of EACL 2026).
+
+
 
 CDPO extends Direct Preference Optimization (DPO) with causal backdoor adjustment to mitigate confounding effects in preference-based language model alignment.
 
